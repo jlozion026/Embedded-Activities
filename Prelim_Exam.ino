@@ -66,7 +66,7 @@ void loop() {
       Serial.println(" cm");
 
       // checks if the current reading is >= the previous reading
-      if(sonar_reading != EEPROM.read(0)){ 
+      if(sonar_reading != EEPROM[0]){ 
         /*
          **EEPROM address assignment: 
               address 0: previous reading
@@ -92,7 +92,7 @@ void loop() {
           // EEPROM.write(1, water_diff);
           EEPROM[1] = water_diff; 
 
-          byte cup_counter = EEPROM.read(2);
+          byte cup_counter = EEPROM[2];
           EEPROM.write(2, cup_counter + 1);
           Serial.print("Total Intake: ");
           Serial.println(EEPROM[2]);
