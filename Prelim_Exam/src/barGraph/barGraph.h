@@ -1,4 +1,5 @@
 #include "Arduino.h"
+#include <Wire.h>
 #include <LiquidCrystal_I2C.h>
 
 
@@ -12,3 +13,4 @@ class BarGraph{
   private:
     LiquidCrystal_I2C* _lcd;
 };
+
