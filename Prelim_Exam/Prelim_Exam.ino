@@ -1,14 +1,14 @@
 #include <EEPROM.h>
-#include <DHT.h>
-#include <NewPing.h>
-#include <Wire.h>
-#include <LiquidCrystal_I2C.h>
+
+#include "src/sonar/sonar.h"
 #include "src/barGraph/barGraph.h"
+#include "src/dht/dht.h"
 
 
 #define sensor 2            // S, vcc, gnd
 #define DHTTYPE DHT11
 DHT dht(sensor, DHTTYPE);
+
 NewPing sonar(7, 8, 7);
 
 const unsigned long event_interval = 2000;
@@ -21,15 +21,36 @@ unsigned long level_prev_time = 0;
 LiquidCrystal_I2C lcd(0x27, 16, 2);
 BarGraph barGraph(&lcd);
 
-byte cup_threshold = 7;
+const byte CUP_THRESHOLD = 7;
 
 
-void displayTemp(float tempc, float humid){
-    Serial.print("Temp in C = ");
-    Serial.println(tempc);
-    Serial.print("Humidity = ");
-    Serial.println(humid);
+
+void calc_curr_intake(unsigned long curr_reading, byte water_level){
+  if(curr_reading > EEPROM.read(0)){
+    // EEPROM.write(1, water_level + sonar_reading);
+    byte current_intake = curr_reading - EEPROM[0];
+    EEPROM[1] = current_intake + water_level;
+    
+    Serial.print("Water Level Intake: ");
+    Serial.println(EEPROM[1]);
+  }
 }
+
+void calc_total_cup(){
+  if(EEPROM[1] >= CUP_THRESHOLD){
+    byte water_diff = EEPROM[1] - CUP_THRESHOLD;
+    EEPROM[1] = water_diff; 
+
+    byte cup_counter = EEPROM[2];
+    EEPROM[2] = cup_counter + 1;
+    Serial.print("Number of Cups: ");
+    Serial.println(EEPROM[2]);
+
+    EEPROM[0] = 0;
+  }
+}
+
+
 
 void setup() {
     Serial.begin(9600);
@@ -56,12 +77,10 @@ void loop() {
     
 
     if(curr_time - prev_time >= event_interval){
-
         float temp = dht.readTemperature();;
         float humid = dht.readHumidity();
         
-
-        //displayTemp(temp, humid);
+        displayTemp(temp, humid);
         
         prev_time = curr_time;
     }
@@ -69,10 +88,8 @@ void loop() {
     unsigned long level_curr_time = millis();
     if(level_curr_time - level_prev_time >= level_interval){
       unsigned long sonar_reading = sonar.ping_cm(); //current reading
-
-      Serial.print("Current Reading: ");
-      Serial.print(sonar_reading); 
-      Serial.println(" cm");
+      
+      displaySonarReading(sonar_reading);
 
       barGraph.printBar(EEPROM[2], sonar_reading);
       lcd.setCursor(0, 1);
@@ -80,7 +97,7 @@ void loop() {
       lcd.print(EEPROM[2]);
 
       // checks if the current reading is >= the previous reading
-      if(sonar_reading != EEPROM[0]){ 
+      if(sonar_reading != EEPROM[0]){
         /*
          **EEPROM address assignment: 
               address 0: previous reading
@@ -88,34 +105,15 @@ void loop() {
               address 2: cup counter
         */
 
-        int water_level = EEPROM[1];
-        
+        byte water_level = EEPROM[1];
       
         // if curr_reading > water_level: increment 
-        if(sonar_reading > EEPROM.read(0)){ 
-          // EEPROM.write(1, water_level + sonar_reading);
-          byte current_intake = sonar_reading - EEPROM[0];
-          EEPROM[1] = current_intake + water_level;
-          
-          Serial.print("Water Level Intake: ");
-          Serial.println(EEPROM[1]);
-          
-        }
+        calc_curr_intake(sonar_reading, water_level);
 
-        if(EEPROM[1] >= cup_threshold){
-          byte water_diff = EEPROM[1] - cup_threshold;
-          // EEPROM.write(1, water_diff);
-          EEPROM[1] = water_diff; 
+        // if water counter == CUP_THRESHOLD: increment cup counter
+        calc_total_cup();
 
-          byte cup_counter = EEPROM[2];
-          EEPROM[2] = cup_counter + 1;
-          Serial.print("Number of Cups: ");
-          Serial.println(EEPROM[2]);
-
-          EEPROM[0] = 0;
-        }
-        EEPROM.write(0, sonar_reading);   //save the current reading to EEPROM address 0
-
+        EEPROM[0] = sonar_reading; //save the current reading to EEPROM address 0
      }
 
       level_prev_time = level_curr_time;
