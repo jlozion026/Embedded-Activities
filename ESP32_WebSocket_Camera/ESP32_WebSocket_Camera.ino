@@ -1,6 +1,3 @@
-
-//Author : Mudassar Tamboli
-
 #include "OV7670.h"
 
 #include <WebSockets.h>
@@ -203,10 +200,13 @@ void initWifiStation() {
     WiFi.mode(WIFI_AP_STA);
     WiFi.begin(ssid, password);    
     Serial.print("\nConnecting to WiFi");
-    while (WiFi.status() != WL_CONNECTED) {
-       delay(5000);        
+    while (WiFi.status() != WL_CONNECTED) { 
+      digitalWrite(LED_BUILTIN, 1);
+       delay(5000);
+       digitalWrite(LED_BUILTIN, 0);        
        Serial.print(".");
     }
+    digitalWrite(LED_BUILTIN, 0);
     Serial.println(String("\nConnected to the WiFi network (") + ssid + ")" );
 
     Serial.print("\nStation IP address: ");
@@ -223,9 +223,14 @@ void initWifiMulti()
 
     Serial.println("Connecting Wifi...");
     while(wifiMulti.run() != WL_CONNECTED) {
-       delay(5000);        
+      digitalWrite(LED_BUILTIN, 1);
+       delay(5000);
+       digitalWrite(LED_BUILTIN, 0);        
        Serial.print(".");
     }
+    digitalWrite(LED_BUILTIN, 0);
+
+
     
     Serial.print("\n");
     Serial.print("WiFi connected : ");

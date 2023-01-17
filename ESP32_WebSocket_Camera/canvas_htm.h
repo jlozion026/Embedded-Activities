@@ -1,5 +1,4 @@
-static const char canvas_htm[] PROGMEM = "<!-- Author : Mudassar Tamboli -->\n"\
-"\n"\
+static const char canvas_htm[] PROGMEM = "\n"\
 "<!DOCTYPE html>\n"\
 "<html>\n"\
 "<title> ESP322+OV7670+WEBSOCKET </title>\n"\
@@ -36,7 +35,6 @@ static const char canvas_htm[] PROGMEM = "<!-- Author : Mudassar Tamboli -->\n"\
 "            ws.onopen = function() {\n"\
 "                document.getElementById(\"canvas7670\").style.visibility = \"visible\";\n"\
 "                document.getElementById(\"connecting\").style.visibility = \"hidden\";\n"\
-"                document.getElementById(\"constatus\").innerText = \"Connected to \" + ws.url;\n"\
 "                if (gcanvasid != null && gcanvasid != \"\") {\n"\
 "                    capture(gcanvasid);\n"\
 "                }\n"\
@@ -84,7 +82,6 @@ static const char canvas_htm[] PROGMEM = "<!-- Author : Mudassar Tamboli -->\n"\
 "                   document.getElementById(\"canvas7670\").style.visibility = \"hidden\";\n"\
 "                   document.getElementById(\"connecting\").style.visibility = \"visible\";\n"\
 "                   document.getElementById(\"connecting\").innerText = \"Error \" + evt.data;\n"\
-"                   document.getElementById(\"constatus\").innerText = \"\";\n"\
 "               };\n"\
 "     \n"\
 "            } else {\n"\
@@ -107,39 +104,14 @@ static const char canvas_htm[] PROGMEM = "<!-- Author : Mudassar Tamboli -->\n"\
 "}\n"\
 "\n"\
 "function initCanvas() {\n"\
-"    var canvas = document.getElementById(\"canvas-QQQ-VGA\");\n"\
-"    var ctx = canvas.getContext(\"2d\");\n"\
-"    ctx.font = \"10px Comic Sans MS\";\n"\
-"    ctx.fillStyle = \"#FF0000\";\n"\
-"    ctx.textAlign = \"center\";\n"\
-"    ctx.fillText(\"80 x 60\", canvas.width/2, canvas.height/2);    \n"\
-"\n"\
 "    canvas = document.getElementById(\"canvas-QQ-VGA\");\n"\
 "    ctx = canvas.getContext(\"2d\");\n"\
 "    ctx.font = \"10px Comic Sans MS\";\n"\
 "    ctx.fillStyle = \"#FF0000\";\n"\
 "    ctx.textAlign = \"center\";\n"\
 "    ctx.fillText(\"160 x 120\", canvas.width/2, canvas.height/2);    \n"\
-"\n"\
-"    canvas = document.getElementById(\"canvas-Q-VGA\");\n"\
-"    ctx = canvas.getContext(\"2d\");\n"\
-"    ctx.font = \"10px Comic Sans MS\";\n"\
-"    ctx.fillStyle = \"#FF0000\";\n"\
-"    ctx.textAlign = \"center\";\n"\
-"    ctx.fillText(\"320 x 240\", canvas.width/2, canvas.height/2);    \n"\
-"\n"\
-"/*\n"\
-"    canvas = document.getElementById(\"canvas-VGA\");\n"\
-"    ctx = canvas.getContext(\"2d\");\n"\
-"    ctx.font = \"10px Comic Sans MS\";\n"\
-"    ctx.fillStyle = \"#FF0000\";\n"\
-"    ctx.textAlign = \"center\";\n"\
-"    ctx.fillText(\"640 x 480\", canvas.width/2, canvas.height/2);    \n"\
-"*/    \n"\
-"\n"\
 "}\n"\
 "\n"\
-"//https://github.com/ThingPulse/minigrafx/issues/8\n"\
 "function display(pixels, pixelcount, flag) {\n"\
 "    //alert('display'); \n"\
 "    var i = 0;\n"\
@@ -245,73 +217,14 @@ static const char canvas_htm[] PROGMEM = "<!-- Author : Mudassar Tamboli -->\n"\
 "<table align=center valign=center id=\"canvas7670\">\n"\
 "    <tr> \n"\
 "        <td valign=\"bottom\">    \n"\
-"<canvas id=\"canvas-QQQ-VGA\" width=\"80\" height=\"60\" style=\"cursor:crosshair;border:1px solid #FFFF00;\" onclick=\"capture('canvas-QQQ-VGA')\">\n"\
+"<canvas id=\"canvas-QQ-VGA\" width=\"160\" height=\"120\" style=\"border:1px solid #00FF00;\">\n"\
 "Your browser does not support the HTML5 canvas tag.\n"\
 "</canvas>\n"\
 "        </td>\n"\
 "\n"\
-"        <td valign=\"bottom\">    \n"\
-"<canvas id=\"canvas-QQ-VGA\" width=\"160\" height=\"120\" style=\"cursor:crosshair;border:1px solid #00FF00;\" onclick=\"capture('canvas-QQ-VGA')\">\n"\
-"Your browser does not support the HTML5 canvas tag.\n"\
-"</canvas>\n"\
-"        </td>\n"\
-"\n"\
-"        <td valign=\"bottom\">\n"\
-"<canvas id=\"canvas-Q-VGA\" width=\"320\" height=\"240\" style=\"cursor:crosshair;border:1px solid #0000FF;\" onclick=\"capture('canvas-Q-VGA')\">\n"\
-"Your browser does not support the HTML5 canvas tag.\n"\
-"</canvas>\n"\
-"        </td>\n"\
-"<!--\n"\
-"        <td valign=\"bottom\">\n"\
-"<canvas id=\"canvas-VGA\" width=\"640\" height=\"480\" style=\"cursor:crosshair;border:1px solid #FF00FF;\" onclick=\"capture('canvas-VGA')\">\n"\
-"Your browser does not support the HTML5 canvas tag.\n"\
-"</canvas>\n"\
-"        </td>\n"\
-"-->  \n"\
 "    </tr>\n"\
-"\n"\
-"    <tr> \n"\
-"        <td align=center>    \n"\
-"            QQQ-VGA     <BR>\n"\
-"        </td>\n"\
-"\n"\
-"        <td align=center>    \n"\
-"            QQ-VGA     <BR>\n"\
-"        </td>\n"\
-"    \n"\
-"        <td align=center>\n"\
-"            Q-VGA     <BR>\n"\
-"        </td>\n"\
-"    \n"\
-"<!--\n"\
-"        <td align=center>    \n"\
-"            VGA     <BR>\n"\
-"        </td>\n"\
-"-->  \n"\
-"    </tr>\n"\
-"\n"\
 "\n"\
 "</table>\n"\
-"<BR><BR>\n"\
-"<table width=30% align=center bgcolor=\"#FFFF00\" >\n"\
-" <tr align=center style=\"color: #fff; background: black;\"> \n"\
-"   <td id=\"constatus\" colspan=2>Websocket not connected</td> \n"\
-" </tr>\n"\
-"\n"\
-" <tr align=center style=\"color: #fff; background: black;\"> \n"\
-"   <td>AP IP </td> \n"\
-"   <td>WiFi IP</td> \n"\
-" </tr>\n"\
-"\n"\
-" <tr align=center bgcolor=\"#FFF\"> \n"\
-"   <td id=\"ap-ip\" style=\"cursor:pointer\" onclick=\"setip('ap-ip')\">192.168.4.1</td> \n"\
-"   <td id=\"wifi-ip\" style=\"cursor:pointer\" onclick=\"setip('wifi-ip')\"></td> \n"\
-" </tr>\n"\
-"         \n"\
-"</table> \n"\
-"\n"\
-"\n"\
 "</body>\n"\
 "</html>\n"\
 "\n";
-
