@@ -13,8 +13,8 @@ const unsigned long event_interval = 100;
 unsigned long prev_time = 0;
 
 
-const char* WIFINAME = "Redmi Note 7";
-const char* PASS = "joshuazion";
+const char* WIFINAME = "GONZALESWIFI";
+const char* PASS = "#l03e1T3@";
 
 const char* serverName = "http://192.168.254.101/data.json";
 
