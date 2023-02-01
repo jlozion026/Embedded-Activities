@@ -1,0 +1,7 @@
+{
+  "cpu": {
+    "fqbn": "esp8266:esp8266:nodemcu",
+    "name": "esp8266",
+    "port": "serial:///dev/ttyUSB0"
+  }
+}
